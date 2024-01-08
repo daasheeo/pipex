@@ -6,7 +6,7 @@
 #    By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 09:58:28 by jesmunoz          #+#    #+#              #
-#    Updated: 2024/01/03 22:20:56 by jesmunoz         ###   ########.fr        #
+#    Updated: 2024/01/08 19:00:23 by jesmunoz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,8 @@ INCLUDE 			=   ./includes/
 
 SRC_FILES   		= 	${SRC_DIR}/pipex.c $(SRC_DIR)/run_pipex.c	\
 						$(SRC_DIR)/get_path.c $(SRC_DIR)/get_cmd_path.c	\
-						$(SRC_DIR)/error.c $(SRC_DIR)/cmd_generator.c	\
+						$(SRC_DIR)/manager.c $(SRC_DIR)/cmd_generator.c	\
+						$(SRC_DIR)/create_pipes.c $(SRC_DIR)/get_fds.c	\
 
 
 OBJ			=	$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
@@ -68,7 +69,7 @@ FT_LNK		= 	-L$(LIBFT_SRC) -lft
 #------------------------------------------------------------------------------#
 
 all: 
-	@$(MAKE) -C $(LIBFT_SRC) bonus
+	@$(MAKE) -C $(LIBFT_SRC)
 	@$(MAKE) $(NAME)
 
 $(OBJ_DIR)/%.o: %.c Makefile

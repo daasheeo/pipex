@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 16:53:45 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/04 18:10:03 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/08 19:05:50 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+typedef enum e_fd
+{
+	READ,
+	WRITE
+}					t_fd;
 
 typedef struct s_cmd
 {
@@ -47,6 +53,7 @@ typedef struct s_pipex
 	int				in_fd;
 	const char		*outfile;
 	int				out_fd;
+	int				pipes[2][2];
 }					t_pipex;
 
 char				*ft_getenv(const char *name, char **envp);
@@ -60,5 +67,10 @@ void				ft_run_pipex(t_pipex *pipex_data, char **argv,
 t_cmd				*ft_get_last_cmd(t_cmd *cmd_list);
 t_cmd				*ft_get_cmd_by_position(t_cmd *cmd_list, int position);
 char				*ft_get_path_by_position(t_cmd *cmd_list, int position);
+void				ft_get_infile_fd(t_pipex *pipex);
+void				ft_get_outfile_fd(t_pipex *pipex);
+void				ft_create_pipes(t_pipex *pipex);
+void				ft_close_pipes(t_pipex *pipex);
+void				ft_free_pipex(t_pipex *pipex);
 
 #endif

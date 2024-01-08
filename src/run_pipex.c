@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 20:21:17 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/04 18:17:08 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/08 18:53:59 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	ft_run_pipex(t_pipex *pipex_data, char **argv, char **env_vars)
 	t_cmd	*current_command;
 
 	command_index = 0;
+	current_command = NULL;
 	while (command_index < pipex_data->total_cmds)
 	{
 		current_command = ft_new_cmd();

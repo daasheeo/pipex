@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:14:06 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/04 18:16:47 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/08 18:56:12 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_add_cmd(t_cmd **cmd_list, t_cmd *cmd)
 	t_cmd	*current_cmd;
 
 	if (!cmd_list)
-		return ;
+		ft_error("cmd_list is NULL");
 	if (!*cmd_list)
 	{
 		*cmd_list = cmd;
