@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:14:06 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/08 18:56:12 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/17 09:56:44 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ t_cmd	*ft_new_cmd(void)
 	new_cmd->cmd = NULL;
 	new_cmd->path = NULL;
 	new_cmd->position = 0;
-	new_cmd->is_env = false;
-	new_cmd->is_child = false;
-	new_cmd->is_last = false;
+	new_cmd->next = NULL;
 	return (new_cmd);
 }
 
@@ -56,19 +54,10 @@ t_pipex	*ft_pipex_init(void)
 		return (NULL);
 	pipex->total_cmds = 0;
 	pipex->is_heredoc = false;
+	pipex->delimiter = NULL;
 	pipex->commands = NULL;
 	pipex->executed_cmds_counter = 0;
 	return (pipex);
-}
-
-t_cmd	*ft_get_last_cmd(t_cmd *cmd_list)
-{
-	t_cmd	*current_cmd;
-
-	current_cmd = cmd_list;
-	while (!current_cmd->is_last)
-		current_cmd = current_cmd->next;
-	return (current_cmd);
 }
 
 t_cmd	*ft_get_cmd_by_position(t_cmd *cmd_list, int position)
@@ -80,5 +69,3 @@ t_cmd	*ft_get_cmd_by_position(t_cmd *cmd_list, int position)
 		current_cmd = current_cmd->next;
 	return (current_cmd);
 }
-
-

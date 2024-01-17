@@ -6,12 +6,24 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:17:17 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/04 18:10:47 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/17 13:48:08 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Libft/libft.h"
 #include "../includes/pipex.h"
+
+void	ft_print_splits(char **splits)
+{
+	int	i;
+
+	i = 0;
+	while (splits[i])
+	{
+		printf("    %s\n", splits[i]);
+		i++;
+	}
+}
 
 char	*ft_search_path(char *cmd, char **envp)
 {
@@ -27,6 +39,7 @@ char	*ft_search_path(char *cmd, char **envp)
 	path_split = ft_split(path, ':');
 	if (!path_split)
 		ft_error("ft_split failed");
+	//ft_print_splits(path_split);
 	while (path_split[i])
 	{
 		path_cmd = ft_strjoin(path_split[i], "/");

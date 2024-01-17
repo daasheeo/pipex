@@ -6,7 +6,7 @@
 #    By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/30 18:25:29 by jesmunoz          #+#    #+#              #
-#    Updated: 2023/12/30 18:55:21 by jesmunoz         ###   ########.fr        #
+#    Updated: 2024/01/17 10:27:23 by jesmunoz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ BROWN 		=	\033[38;2;184;143;29m
 NAME 		= libft.a
 OBJ_DIR		= obj
 CC 			= gcc
-CFLAGS 		= -Wall -Wextra -Werror -MMD
+CFLAGS 		= -Wall -Wextra -Werror -g -MMD
 RM			= 	rm -rf
 
 SRC_FILES   =	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \

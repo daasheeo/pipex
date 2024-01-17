@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 16:53:25 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/08 19:17:29 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/17 13:47:17 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,51 @@
 #include "../includes/Libft/libft.h"
 #include "../includes/pipex.h"
 
+void	debug_cmd(t_cmd *cmd)
+{
+	printf("Command name: %s\n", cmd->name);
+	printf("Command path: %s\n", cmd->path);
+	printf("Command position: %d\n", cmd->position);
+	printf("Is env: %d\n", cmd->is_env);
+	printf("Command arguments:\n");
+	for (int i = 0; cmd->cmd[i] != NULL; i++)
+	{
+		printf("    %s\n", cmd->cmd[i]);
+	}
+	if (cmd->next != NULL)
+	{
+		printf("Next command:\n");
+		debug_cmd(cmd->next);
+	}
+}
+
+void	debug_pipex(t_pipex *pipex)
+{
+	printf("------DEBUG-----\n");
+	printf("Total commands: %d\n", pipex->total_cmds);
+	printf("Executed commands counter: %d\n", pipex->executed_cmds_counter);
+	printf("Is heredoc: %d\n", pipex->is_heredoc);
+	printf("Delimiter: %s\n", pipex->delimiter);
+	printf("Is tempfile created: %d\n", pipex->is_tempfile_created);
+	printf("Infile: %s\n", pipex->infile);
+	printf("Infile fd: %d\n", pipex->in_fd);
+	printf("Outfile: %s\n", pipex->outfile);
+	printf("Outfile fd: %d\n", pipex->out_fd);
+	printf("Pipes:\n");
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			printf("    Pipe[%d][%d]: %d\n", i, j, pipex->pipes[i][j]);
+		}
+	}
+	printf("Commands:\n");
+	debug_cmd(pipex->commands);
+}
+
 void	ft_execute_cmd(t_pipex *pipex, t_cmd *cmd, char **envp)
 {
+	//debug_pipex(pipex);
 	if (pipex->executed_cmds_counter == 0)
 	{
 		dup2(pipex->in_fd, STDIN_FILENO);
@@ -34,22 +77,13 @@ void	ft_execute_cmd(t_pipex *pipex, t_cmd *cmd, char **envp)
 		dup2(pipex->pipes[pipex->executed_cmds_counter][WRITE], STDOUT_FILENO);
 	}
 	ft_close_pipes(pipex);
-	if (cmd->is_env)
-		execve(cmd->path, cmd->cmd, envp);
-	else
-		execve(cmd->path, cmd->cmd, NULL);
+	execve(cmd->path, cmd->cmd, envp);
 }
 
 void	ft_child_process(t_pipex *pipex, char **envp)
 {
 	ft_execute_cmd(pipex, ft_get_cmd_by_position(pipex->commands,
 			pipex->executed_cmds_counter), envp);
-}
-
-void	ft_parent_process(t_pipex *pipex)
-{
-	ft_close_pipes(pipex);
-	waitpid(-1, NULL, 0);
 }
 
 int	ft_pipex(char **argv, char **envp, t_pipex *pipex)
@@ -61,16 +95,22 @@ int	ft_pipex(char **argv, char **envp, t_pipex *pipex)
 	while (pipex->executed_cmds_counter < pipex->total_cmds)
 	{
 		pid = fork();
+		printf("pid-> %d\n", pid);
 		if (pid < 0)
 			ft_error("fork failed");
 		if (pid == 0)
+		{
 			ft_child_process(pipex, envp);
-		pipex->executed_cmds_counter++;
+		}
+		else
+		{
+			pipex->executed_cmds_counter++;
+		}
 	}
-	ft_parent_process(pipex);
+	waitpid(-1, NULL, 0);
+	ft_close_pipes(pipex);
 	return (0);
 }
-
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -88,6 +128,12 @@ int	main(int argc, char **argv, char **envp)
 	pipex->total_cmds = argc - 3;
 	pipex->infile = argv[1];
 	pipex->outfile = argv[argc - 1];
+	if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
+	{
+		pipex->is_heredoc = true;
+		pipex->delimiter = argv[2];
+		pipex->total_cmds = argc - 4;
+	}
 	ft_get_infile_fd(pipex);
 	ft_get_outfile_fd(pipex);
 	ft_pipex(argv, envp, pipex);

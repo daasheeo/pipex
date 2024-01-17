@@ -6,12 +6,14 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 16:53:45 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/08 19:05:50 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/15 13:35:27 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
+
+# define TMP_FILE "temp_here_doc.txt"
 
 # include <errno.h>
 # include <fcntl.h>
@@ -37,8 +39,6 @@ typedef struct s_cmd
 	char			*path;
 	int				position;
 	bool			is_env;
-	bool			is_child;
-	bool			is_last;
 	struct s_cmd	*next;
 
 }					t_cmd;
@@ -49,6 +49,8 @@ typedef struct s_pipex
 	int				total_cmds;
 	int				executed_cmds_counter;
 	bool			is_heredoc;
+	char			*delimiter;
+	bool			is_tempfile_created;
 	const char		*infile;
 	int				in_fd;
 	const char		*outfile;
@@ -64,7 +66,6 @@ void				ft_add_cmd(t_cmd **cmd_list, t_cmd *cmd);
 t_cmd				*ft_new_cmd(void);
 void				ft_run_pipex(t_pipex *pipex_data, char **argv,
 						char **env_vars);
-t_cmd				*ft_get_last_cmd(t_cmd *cmd_list);
 t_cmd				*ft_get_cmd_by_position(t_cmd *cmd_list, int position);
 char				*ft_get_path_by_position(t_cmd *cmd_list, int position);
 void				ft_get_infile_fd(t_pipex *pipex);
@@ -72,5 +73,7 @@ void				ft_get_outfile_fd(t_pipex *pipex);
 void				ft_create_pipes(t_pipex *pipex);
 void				ft_close_pipes(t_pipex *pipex);
 void				ft_free_pipex(t_pipex *pipex);
+void				ft_text_to_file(char *delimiter, int fd);
+char				*get_next_line(int fd);
 
 #endif

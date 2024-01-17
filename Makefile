@@ -6,7 +6,7 @@
 #    By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 09:58:28 by jesmunoz          #+#    #+#              #
-#    Updated: 2024/01/08 19:00:23 by jesmunoz         ###   ########.fr        #
+#    Updated: 2024/01/09 12:27:30 by jesmunoz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ SRC_FILES   		= 	${SRC_DIR}/pipex.c $(SRC_DIR)/run_pipex.c	\
 						$(SRC_DIR)/get_path.c $(SRC_DIR)/get_cmd_path.c	\
 						$(SRC_DIR)/manager.c $(SRC_DIR)/cmd_generator.c	\
 						$(SRC_DIR)/create_pipes.c $(SRC_DIR)/get_fds.c	\
+						$(SRC_DIR)/get_next_line.c $(SRC_DIR)/text_to_file.c	\
 
 
 OBJ			=	$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
