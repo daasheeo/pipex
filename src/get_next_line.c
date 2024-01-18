@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:51:02 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/09 16:52:39 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:19:47 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,15 @@ static char	*ft_clean_buffer(char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[1024];
 	char		*new_line;
 
-	if (fd < 0)
+	if (fd < 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	buffer = ft_read_buffer(buffer, fd);
-	if (!buffer)
+	buffer[fd] = ft_read_buffer(buffer[fd], fd);
+	if (!buffer[fd])
 		return (NULL);
-	new_line = ft_new_line(buffer);
-	buffer = ft_clean_buffer(buffer);
+	new_line = ft_new_line(buffer[fd]);
+	buffer[fd] = ft_clean_buffer(buffer[fd]);
 	return (new_line);
 }

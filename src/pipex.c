@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 16:53:25 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/17 13:47:17 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:20:41 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	debug_pipex(t_pipex *pipex)
 
 void	ft_execute_cmd(t_pipex *pipex, t_cmd *cmd, char **envp)
 {
-	//debug_pipex(pipex);
+	debug_pipex(pipex);
 	if (pipex->executed_cmds_counter == 0)
 	{
 		dup2(pipex->in_fd, STDIN_FILENO);
@@ -76,8 +76,8 @@ void	ft_execute_cmd(t_pipex *pipex, t_cmd *cmd, char **envp)
 			STDIN_FILENO);
 		dup2(pipex->pipes[pipex->executed_cmds_counter][WRITE], STDOUT_FILENO);
 	}
-	ft_close_pipes(pipex);
 	execve(cmd->path, cmd->cmd, envp);
+	ft_close_pipes(pipex);
 }
 
 void	ft_child_process(t_pipex *pipex, char **envp)
@@ -104,10 +104,10 @@ int	ft_pipex(char **argv, char **envp, t_pipex *pipex)
 		}
 		else
 		{
+			waitpid(-1, NULL, 0);
 			pipex->executed_cmds_counter++;
 		}
 	}
-	waitpid(-1, NULL, 0);
 	ft_close_pipes(pipex);
 	return (0);
 }

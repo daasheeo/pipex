@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 12:13:39 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/15 12:32:20 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:23:55 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@ void	ft_text_to_file(char *delimiter, int fd)
 	char	*line;
 
 	line = NULL;
-	fprintf(stderr, "delimiter: %s\n", delimiter);
-	fprintf(stderr, "fd: %d\n", fd);
-	fprintf(stderr, "STDIN_FILENO: %d\n", STDIN_FILENO);
-	fprintf(stderr, "STDOUT_FILENO: %d\n", STDOUT_FILENO);
-	fprintf(stderr, "STDERR_FILENO: %d\n", STDERR_FILENO);
 	while (1)
 	{
 		ft_putstr_fd("pipe heredoc> ", STDOUT_FILENO);

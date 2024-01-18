@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:14:06 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/17 09:56:44 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:34:51 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ t_pipex	*ft_pipex_init(void)
 	pipex = (t_pipex *)malloc(sizeof(t_pipex));
 	if (!pipex)
 		return (NULL);
+	pipex->argc = 0;
 	pipex->total_cmds = 0;
 	pipex->is_heredoc = false;
 	pipex->delimiter = NULL;
@@ -66,6 +67,19 @@ t_cmd	*ft_get_cmd_by_position(t_cmd *cmd_list, int position)
 
 	current_cmd = cmd_list;
 	while (current_cmd->position != position)
+	{
+		ft_putstr_fd("current_cmd->position: ", STDIN_FILENO);
+		current_cmd = current_cmd->next;
+	}
+	return (current_cmd);
+}
+
+t_cmd	*ft_get_last_cmd(t_cmd *cmd_list)
+{
+	t_cmd	*current_cmd;
+
+	current_cmd = cmd_list;
+	while (current_cmd->next)
 		current_cmd = current_cmd->next;
 	return (current_cmd);
 }

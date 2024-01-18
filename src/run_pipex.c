@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 20:21:17 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/17 10:04:42 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:21:13 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,27 @@
 void	ft_run_pipex(t_pipex *pipex_data, char **argv, char **env_vars)
 {
 	int		command_index;
+	int		command_position;
 	t_cmd	*current_command;
-	int		total_commands;
 
-	command_index = 0;
-	total_commands = pipex_data->total_cmds;
+	command_index = 2;
+	command_position = 0;
 	if (pipex_data->is_heredoc)
 	{
 		ft_text_to_file(pipex_data->delimiter, pipex_data->in_fd);
 		ft_get_infile_fd(pipex_data);
-		command_index = 1;
+		command_index = 3;
 	}
 	current_command = NULL;
-	while (command_index <= total_commands)
+	while (command_index < pipex_data->argc - 1)
 	{
 		current_command = ft_new_cmd();
-		current_command->cmd = ft_split(argv[command_index + 2], ' ');
-		current_command->name = ft_split(argv[command_index + 2], ' ')[0];
+		current_command->cmd = ft_split(argv[command_index], ' ');
+		current_command->name = ft_split(argv[command_index], ' ')[0];
 		current_command->path = ft_search_path(current_command->name, env_vars);
-		current_command->position = command_index;
+		current_command->position = command_position;
 		ft_add_cmd(&pipex_data->commands, current_command);
 		command_index++;
+		command_position++;
 	}
 }

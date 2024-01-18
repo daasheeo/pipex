@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:17:17 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/17 13:48:08 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/17 16:19:08 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	*ft_search_path(char *cmd, char **envp)
 	char	*path;
 	char	**path_split;
 	char	*path_cmd;
+	char	*temp;
 	int		i;
 
 	i = 0;
@@ -39,19 +40,20 @@ char	*ft_search_path(char *cmd, char **envp)
 	path_split = ft_split(path, ':');
 	if (!path_split)
 		ft_error("ft_split failed");
-	//ft_print_splits(path_split);
 	while (path_split[i])
 	{
 		path_cmd = ft_strjoin(path_split[i], "/");
+		temp = ft_strjoin(path_cmd, cmd);
 		if (!path_cmd)
 			ft_error("ft_strjoin failed");
-		path_cmd = ft_strjoin(path_cmd, cmd);
-		if (!path_cmd)
-			ft_error("ft_strjoin failed");
-		if (access(path_cmd, F_OK) == 0)
-			return (path_cmd);
+		if (access(temp, F_OK) == 0)
+			return (temp);
 		i++;
 	}
+	i = -1;
+	while (path_split[++i])
+		free(path_split[i]);
+	free(path_split);
 	return (NULL);
 }
 

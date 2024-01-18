@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 16:53:45 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/15 13:35:27 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:18:18 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <limits.h>
+# include <sys/uio.h>
 
 typedef enum e_fd
 {
@@ -46,6 +48,7 @@ typedef struct s_cmd
 typedef struct s_pipex
 {
 	t_cmd			*commands;
+	int				argc;
 	int				total_cmds;
 	int				executed_cmds_counter;
 	bool			is_heredoc;
@@ -68,6 +71,7 @@ void				ft_run_pipex(t_pipex *pipex_data, char **argv,
 						char **env_vars);
 t_cmd				*ft_get_cmd_by_position(t_cmd *cmd_list, int position);
 char				*ft_get_path_by_position(t_cmd *cmd_list, int position);
+t_cmd				*ft_get_last_cmd(t_cmd *cmd_list);
 void				ft_get_infile_fd(t_pipex *pipex);
 void				ft_get_outfile_fd(t_pipex *pipex);
 void				ft_create_pipes(t_pipex *pipex);
