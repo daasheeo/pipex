@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:14:06 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/18 13:34:51 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/19 09:58:20 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,17 @@ void	ft_add_cmd(t_cmd **cmd_list, t_cmd *cmd)
 	current_cmd->next = cmd;
 }
 
-t_pipex	*ft_pipex_init(void)
+t_pipex	*ft_pipex_init(int argc, char **argv)
 {
 	t_pipex	*pipex;
 
 	pipex = (t_pipex *)malloc(sizeof(t_pipex));
 	if (!pipex)
 		return (NULL);
-	pipex->argc = 0;
-	pipex->total_cmds = 0;
+	pipex->argc = argc;
+	pipex->total_cmds = argc - 3;
+	pipex->infile = argv[1];
+	pipex->outfile = argv[argc - 1];
 	pipex->is_heredoc = false;
 	pipex->delimiter = NULL;
 	pipex->commands = NULL;
@@ -71,15 +73,5 @@ t_cmd	*ft_get_cmd_by_position(t_cmd *cmd_list, int position)
 		ft_putstr_fd("current_cmd->position: ", STDIN_FILENO);
 		current_cmd = current_cmd->next;
 	}
-	return (current_cmd);
-}
-
-t_cmd	*ft_get_last_cmd(t_cmd *cmd_list)
-{
-	t_cmd	*current_cmd;
-
-	current_cmd = cmd_list;
-	while (current_cmd->next)
-		current_cmd = current_cmd->next;
 	return (current_cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:16:01 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/18 19:23:02 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/22 10:17:31 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,17 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
-void	ft_free_pipex(t_pipex *pipex)
+void	ft_free_pipex(t_pipex *pipex, char *msg)
 {
 	if (pipex == NULL)
 	{
 		return ;
 	}
+	if (pipex->is_heredoc)
+		unlink(TMP_FILE);
 	free_cmd(pipex->commands);
 	free(pipex);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd(strerror(errno), 2);
+	exit(1);
 }

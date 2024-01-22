@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 16:53:25 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/18 19:58:35 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:52:21 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	debug_cmd(t_cmd *cmd)
 {
 	while (cmd)
 	{
-		printf("\033[1;33m%-10s | %-15s | %-10d | %-10d\n\n\033[0m",
-			cmd->cmd[0], cmd->path, cmd->position, cmd->is_env);
+		printf("\033[1;33m%-10s | %-15s | %-10d\n\n\033[0m", cmd->cmd[0],
+			cmd->path, cmd->position);
 		for (int i = 0; cmd->cmd[i] != NULL; i++)
 		{
 			printf("\033[1;35m%-10s |\n\033[0m", cmd->cmd[i]);
@@ -56,58 +56,70 @@ void	debug_pipex(t_pipex *pipex)
 		}
 	}
 	printf("\033[1;32m--------------------COMMANDS------------------\n\033[0m");
-	printf("\033[1;32m%-10s | %-15s | %-10s | %-10s\n\n\033[0m", "Command",
-		"Path", "Position", "Is env");
+	printf("\033[1;32m%-10s | %-15s | %-10s\n\n\033[0m", "Command", "Path",
+		"Position");
 	debug_cmd(pipex->commands);
 }
 
-void	ft_execute_cmd(t_cmd *cmd, char **envp)
+int	ft_execute_cmd(t_cmd *cmd, char **envp)
 {
 	if (execve(cmd->path, cmd->cmd, envp) == -1)
-		ft_error("execve failed");
+		return (-1);
+	return (0);
 }
 
-// void	ft_child_process(t_pipex *pipex, char **envp)
-// {
-// 	ft_execute_cmd(pipex, ft_get_cmd_by_position(pipex->commands,
-// 			pipex->executed_cmds_counter), envp);
-// }
+void	ft_child_process(t_pipex *pipex, char **envp)
+{
+	close(pipex->pipes[pipex->executed_cmds_counter][READ]);
+	if (dup2(pipex->pipes[pipex->executed_cmds_counter][WRITE],
+		STDOUT_FILENO) != -1)
+		close(pipex->pipes[pipex->executed_cmds_counter][WRITE]);
+	if (ft_execute_cmd(ft_get_cmd_by_position(pipex->commands,
+				pipex->executed_cmds_counter), envp) == -1)
+		ft_free_pipex(pipex, "execve failed");
+}
 
-int	ft_pipex(char **argv, char **envp, t_pipex *pipex)
+void	ft_parent_process(t_pipex *pipex, pid_t pid)
+{
+	close(pipex->pipes[pipex->executed_cmds_counter][WRITE]);
+	if (dup2(pipex->pipes[pipex->executed_cmds_counter][READ], STDIN_FILENO) !=
+		-1)
+		close(pipex->pipes[pipex->executed_cmds_counter][READ]);
+	waitpid(pid, NULL, 0);
+	pipex->executed_cmds_counter++;
+}
+
+void	ft_pipex(char **argv, char **envp, t_pipex *pipex)
 {
 	pid_t	pid;
 
 	ft_run_pipex(pipex, argv, envp);
-	debug_pipex(pipex);
+	//debug_pipex(pipex);
 	dup2(pipex->in_fd, STDIN_FILENO);
 	while (pipex->executed_cmds_counter < pipex->total_cmds - 1)
 	{
 		if (pipe(pipex->pipes[pipex->executed_cmds_counter]) == -1)
-			ft_error("pipe failed");
+		{
+			close(pipex->in_fd);
+			close(pipex->out_fd);
+			ft_free_pipex(pipex, "pipe failed");
+		}
 		pid = fork();
 		if (pid == -1)
-			ft_error("fork failed");
+		{
+			close(pipex->in_fd);
+			close(pipex->out_fd);
+			ft_free_pipex(pipex, "pipe failed");
+		}
 		if (pid == 0)
-		{
-			close(pipex->pipes[pipex->executed_cmds_counter][READ]);
-			dup2(pipex->pipes[pipex->executed_cmds_counter][WRITE],
-				STDOUT_FILENO);
-			ft_execute_cmd(ft_get_cmd_by_position(pipex->commands,
-					pipex->executed_cmds_counter), envp);
-		}
+			ft_child_process(pipex, envp);
 		else
-		{
-			close(pipex->pipes[pipex->executed_cmds_counter][WRITE]);
-			dup2(pipex->pipes[pipex->executed_cmds_counter][READ],
-				STDIN_FILENO);
-			waitpid(pid, NULL, 0);
-			pipex->executed_cmds_counter++;
-		}
+			ft_parent_process(pipex, pid);
 	}
 	dup2(pipex->out_fd, STDOUT_FILENO);
-	ft_execute_cmd(ft_get_cmd_by_position(pipex->commands,
-			pipex->executed_cmds_counter), envp);
-	return (0);
+	if (ft_execute_cmd(ft_get_cmd_by_position(pipex->commands,
+				pipex->executed_cmds_counter), envp) == -1)
+		ft_free_pipex(pipex, "pipe failed");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -120,13 +132,9 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	}
 	pipex = NULL;
-	pipex = ft_pipex_init();
+	pipex = ft_pipex_init(argc, argv);
 	if (!pipex)
 		ft_error("malloc failed");
-	pipex->argc = argc;
-	pipex->total_cmds = argc - 3;
-	pipex->infile = argv[1];
-	pipex->outfile = argv[argc - 1];
 	if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
 	{
 		pipex->is_heredoc = true;
@@ -136,6 +144,4 @@ int	main(int argc, char **argv, char **envp)
 	ft_get_infile_fd(pipex);
 	ft_get_outfile_fd(pipex);
 	ft_pipex(argv, envp, pipex);
-	ft_free_pipex(pipex);
-	return (0);
 }
