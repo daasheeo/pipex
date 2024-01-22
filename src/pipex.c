@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:39:38 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/22 11:59:19 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/22 18:55:03 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,42 @@
 #include "../include/pipex.h"
 
 
+void ft_print_split(char **split)
+{
+    int i;
+    
+    i = 0;
+    while (split[i])
+    {
+        ft_putendl_fd(split[i], 1);
+        i++;
+    }
+}
+
 void ft_execute_cmd(char *cmd, char **envp)
 {
     char **cmd_args;
     char *cmd_path;
     
-    cmd_args = ft_split(cmd, ' ');
+    cmd_args = NULL;
+    if (ft_strncmp(cmd, "awk ", 4) == 0)
+        cmd_args = ft_custom_split(cmd, ' ', '\'');
+    else
+        cmd_args = ft_split(cmd, ' ');
+    if (!cmd_args)
+        ft_exit_error(0);
+    ft_print_split(cmd_args);
     cmd_path = ft_search_path(cmd_args[0], envp);
-    if (execve(cmd_path, cmd_args, envp) == -1)
+    if (!cmd_path)
     {
         ft_putstr_fd("Error: Command not found\n", 2);
+        ft_putendl_fd(cmd_args[0], 2);
+        ft_free_cmd(cmd_args);
+        exit(0);
+    }
+    if (execve(cmd_path, cmd_args, envp) == -1)
+    {
+        ft_putstr_fd("Error: Failed to execute command\n", 2);
         ft_putendl_fd(cmd_args[0], 2);
         ft_free_cmd(cmd_args);
         exit(0);

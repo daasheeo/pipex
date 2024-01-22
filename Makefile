@@ -6,7 +6,7 @@
 #    By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 09:58:28 by jesmunoz          #+#    #+#              #
-#    Updated: 2024/01/22 11:58:31 by jesmunoz         ###   ########.fr        #
+#    Updated: 2024/01/22 17:11:34 by jesmunoz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ INCLUDE 			=   ./include/
 
 SRC_FILES   		= 	${SRC_DIR}/pipex.c ${SRC_DIR}/get_cmd_path.c \
 						${SRC_DIR}/get_path.c ${SRC_DIR}/utils.c \
+						${SRC_DIR}/custom_split.c \
 
 OBJ			=	$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 DEP			= 	$(addsuffix .d, $(basename $(SRC_FILES)))
