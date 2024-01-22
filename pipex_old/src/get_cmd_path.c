@@ -6,23 +6,24 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:17:17 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/22 11:58:48 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/19 10:26:36 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libs/Libft/libft.h"
-#include "../include/pipex.h"
+#include "../includes/Libft/libft.h"
+#include "../includes/pipex.h"
 
 static char	**ft_get_splitted_path(char **envp)
 {
+	char	*path;
 	char	**path_split;
 
-	path_split = ft_split(ft_getenv("PATH", envp), ':');
+	path = ft_getenv("PATH", envp);
+	if (!path)
+		ft_error("PATH not found");
+	path_split = ft_split(path, ':');
 	if (!path_split)
-	{
-		ft_putstr_fd("Error: PATH not found\n", 2);
-		exit(0);
-	}
+		ft_error("ft_split failed");
 	return (path_split);
 }
 
@@ -35,14 +36,15 @@ char	*ft_search_path(char *cmd, char **envp)
 
 	path_split = ft_get_splitted_path(envp);
 	i = 0;
-	while (path_split[++i])
+	while (path_split[i])
 	{
 		path_cmd = ft_strjoin(path_split[i], "/");
 		temp = ft_strjoin(path_cmd, cmd);
-		free(path_cmd);
-		if (access(temp, F_OK | X_OK) == 0)
+		if (!path_cmd)
+			ft_error("ft_strjoin failed");
+		if (access(temp, F_OK) == 0)
 			return (temp);
-		free(temp);
+		i++;
 	}
 	i = -1;
 	while (path_split[++i])

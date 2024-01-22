@@ -6,12 +6,12 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:15:22 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/22 11:58:58 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/03 17:16:24 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libs/Libft/libft.h"
-#include "../include/pipex.h"
+#include "../includes/Libft/libft.h"
+#include "../includes/pipex.h"
 
 char	*ft_getenv(const char *name, char **envp)
 {

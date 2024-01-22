@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_path.c                                         :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/03 17:15:22 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/22 11:58:58 by jesmunoz         ###   ########.fr       */
+/*   Created: 2024/01/22 11:33:25 by jesmunoz          #+#    #+#             */
+/*   Updated: 2024/01/22 11:38:00 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libs/Libft/libft.h"
-#include "../include/pipex.h"
 
-char	*ft_getenv(const char *name, char **envp)
+void ft_free_cmd(char **cmd_args)
 {
-	int	i;
-	int	j;
-	int	len;
+    int i;
+    
+    i = 0;
+    while (cmd_args[i])
+    {
+        free(cmd_args[i]);
+        i++;
+    }
+    free(cmd_args);
+}
 
-	i = 0;
-	len = ft_strlen(name);
-	while (envp[i])
-	{
-		j = 0;
-		while (envp[i][j] == name[j] && j < len)
-			j++;
-		if (j == len && envp[i][j] == '=')
-			return (&envp[i][j + 1]);
-		i++;
-	}
-	return (NULL);
+void ft_exit_error(int option)
+{
+    if (option == 1)
+        ft_putstr_fd("Error: Wrong number of arguments\n", 2);       
+    exit(0);
 }

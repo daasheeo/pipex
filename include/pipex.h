@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 16:53:45 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/19 13:40:31 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/22 11:56:51 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void				ft_get_outfile_fd(t_pipex *pipex);
 void				ft_free_pipex(t_pipex *pipex, char *msg);
 void				ft_text_to_file(char *delimiter, int fd);
 char				*get_next_line(int fd);
-void				print_report(void);
+
+void 				ft_free_cmd(char **cmd_args);
+void 				ft_exit_error(int error_code);
 
 #endif

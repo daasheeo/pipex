@@ -1,0 +1,15 @@
+This is a project from the 42 cursus. The goal is to create a program that mimics the behavior of the shell command pipe.
+This file && folder are the old version of the project. The new version is in the folder pipex.
+## Usage
+```
+./pipex file1 cmd1 cmd2 file2
+```
+## Example
+```
+./pipex infile "ls -l" "wc -l" outfile
+```
+## Result
+```
+$> ./pipex infile "ls -l" "wc -l" outfile
+$> diff outfile <(ls -l | wc -l)
+```
