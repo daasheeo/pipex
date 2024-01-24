@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 16:53:45 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/22 17:10:31 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/23 14:56:18 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ char 				**ft_custom_split(char *string, char splitter, char flag);
 /*------------------------------------------------------------------------------*/
 
 void 				ft_free_cmd(char **cmd_args);
-void 				ft_exit_error(int error_code);
+void 				ft_exit_error(int error_code, char *message);
 
 #endif
