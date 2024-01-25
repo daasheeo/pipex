@@ -6,13 +6,13 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 16:17:11 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/22 18:19:25 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/24 13:30:03 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	free_lst_memory(char **str)
+static void	free_lst_memory(char **str)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ void	free_lst_memory(char **str)
 	free(str);
 }
 
-size_t	ft_big_array_size(char const *s, char c)
+static size_t	ft_big_array_size(char const *s, char c)
 {
 	size_t	n_words;
 	int		trigger;
@@ -46,7 +46,7 @@ size_t	ft_big_array_size(char const *s, char c)
 	return (n_words);
 }
 
-char	*ft_word_dup(const char *s1, int start, int finish)
+static char	*ft_word_dup(const char *s1, int start, int finish)
 {
 	char	*res_word;
 	int		i;

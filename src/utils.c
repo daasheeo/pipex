@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 11:33:25 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/23 14:59:08 by codespace        ###   ########.fr       */
+/*   Updated: 2024/01/25 10:37:59 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libs/Libft/libft.h"
 #include "../include/pipex.h"
+#include "../libs/Libft/libft.h"
 
 void	ft_free_cmd(char **cmd_args)
 {
@@ -33,5 +33,17 @@ void	ft_exit_error(int option, char *message)
 		exit(1);
 	if (option == 2)
 		exit(127);
-	exit(0);
+}
+
+void	free_lst_memory(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
 }

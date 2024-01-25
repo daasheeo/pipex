@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   custom_split.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:58:39 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/23 11:11:39 by codespace        ###   ########.fr       */
+/*   Updated: 2024/01/25 14:06:09 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 #include "../libs/Libft/libft.h"
-
-static void	free_lst_memory(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		free(str[i]);
-		i++;
-	}
-	free(str);
-}
 
 static size_t	ft_big_array_size(char *string, char splitter, char flag)
 {
@@ -68,38 +55,69 @@ static char	*ft_word_dup(const char *s1, int start, int finish)
 	return (res_word);
 }
 
-char	**ft_custom_split(char *string, char splitter, char flag)
+void	ft_increment_flag_and_trigger(int *flag_count, int *trigger,
+		char *string, int i)
 {
-	char **split;
-	size_t i;
-	size_t j;
-	int trigger;
-	int flag_count;
-	split = malloc((ft_big_array_size(string, splitter, flag) + 1)
-			* sizeof(char *));
-	if (!split)
-		return (NULL);
-	i = 0;
+	char	*c;
+
+	c = NULL;
+	if (string[i] == '\'' || string[i] == '\"' || (string[i] == '\'' && string[i
+		+ 1] == '\"'))
+	{
+		if (c == NULL)
+			c = string[i];
+		if (c == string[i])
+			(*flag_count)++;
+		fprintf(stderr, "flag_count: %d\n", *flag_count);
+	}
+	if ((string[i] != '\'' || string[i] == '\"' || (string[i] == '\''
+			&& string[i + 1] == '\"')) && *trigger == -1)
+	{
+		*trigger = i;
+		fprintf(stderr, "trigger: %d\n", *trigger);
+	}
+}
+
+static int	ft_process_string(char *string, char **split, char splitter,
+		char flag)
+{
+	size_t	i;
+	size_t	j;
+	int		trigger;
+	int		flag_count;
+
+	i = -1;
 	j = 0;
 	trigger = -1;
 	flag_count = 0;
-	while (i <= ft_strlen(string))
+	(void)flag;
+	while (++i <= ft_strlen(string))
 	{
-		if (string[i] == flag)
-			flag_count++;
-		if (string[i] != splitter && trigger == -1)
-			trigger = i;
-		else if ((string[i] == splitter || string[i] == '\0'
+		ft_increment_flag_and_trigger(&flag_count, &trigger, string, i);
+		if ((string[i] == splitter || string[i] == '\0'
 				|| i == ft_strlen(string)) && flag_count % 2 == 0
 			&& trigger >= 0)
 		{
-			split[j++] = ft_strtrim(ft_word_dup(string, trigger, i), "\'");
+			ft_putstr_fd(ft_strtrim(ft_word_dup(string, trigger, i), "\'\""), 2);
+			ft_putstr_fd("\n", 2);
+			split[j++] = ft_strtrim(ft_word_dup(string, trigger, i), "\'\"");
 			if (!split[j - 1])
-				return (free_lst_memory(split), NULL);
+				return (free_lst_memory(split), 0);
 			trigger = -1;
 		}
-		i++;
 	}
-	split[j] = NULL;
+	return (split[j] = NULL, 1);
+}
+
+char	**ft_custom_split(char *string, char splitter, char flag)
+{
+	char	**split;
+
+	split = malloc((ft_big_array_size(string, splitter, flag) + 1)
+		* sizeof(char *));
+	if (!split)
+		return (NULL);
+	if (!ft_process_string(string, split, splitter, flag))
+		return (NULL);
 	return (split);
 }
