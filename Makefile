@@ -6,7 +6,7 @@
 #    By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 09:58:28 by jesmunoz          #+#    #+#              #
-#    Updated: 2024/01/22 17:11:34 by jesmunoz         ###   ########.fr        #
+#    Updated: 2024/01/29 15:13:27 by jesmunoz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ DEP			= 	$(addsuffix .d, $(basename $(SRC_FILES)))
 # CUNIT_LNK	=	-L/usr/include/CUnit -lcunit
 LIBFT_SRC	=	${LIBS}/Libft
 FT_LNK		= 	-L$(LIBFT_SRC) -lft
+
 #------------------------------------------------------------------------------#
 #-----------------------------------RULES--------------------------------------#
 #------------------------------------------------------------------------------#
@@ -86,7 +87,7 @@ $(NAME):	$(OBJ)
 	@echo "${ITALIC}${BOLD}${MAGENTA}+---------------------------------------------+${DEF_COLOR}"
 	@echo "${ITALIC}${BOLD}${MAGENTA}|${BLUE} Compiling ${NAME}...${MAGENTA}                      |${DEF_COLOR}"
 	@echo "${ITALIC}${BOLD}${MAGENTA}+---------------------------------------------+${DEF_COLOR}"
-	@$(CC) $(OBJ) $(CUNIT_LNK) $(FT_LNK) -o $(NAME) 
+	@$(CC) $(OBJ) $(CUNIT_LNK) $(FT_LNK) $(MEMORY_LNK) -o $(NAME) 
 	@echo "\n${BLUE} ◎ $(GREEN)$(NAME) compiled successfully ${BLUE}◎$(DEF_COLOR)\n"
 
 clean:

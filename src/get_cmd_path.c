@@ -6,7 +6,7 @@
 /*   By: jesmunoz <jesmunoz@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 17:17:17 by jesmunoz          #+#    #+#             */
-/*   Updated: 2024/01/22 11:58:48 by jesmunoz         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:27:04 by jesmunoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ static char	**ft_get_splitted_path(char **envp)
 	path_split = ft_split(ft_getenv("PATH", envp), ':');
 	if (!path_split)
 	{
-		ft_putstr_fd("Error: PATH not found\n", 2);
-		exit(0);
+		free_lst_memory(path_split);
+		ft_exit_error(127, ERR_ENV, NULL);
 	}
 	return (path_split);
 }
